@@ -7,8 +7,8 @@
 #include "../Models/Project_path.h"
 
 #ifdef __APPLE__
-    #include <SDL2/SDL.h>
-    #include <SDL2/SDL_image.h>
+    #include <SDL.h>
+    #include <SDL_image.h>
 #else
     #include <SDL.h>
     #include <SDL_image.h>
@@ -25,7 +25,7 @@ public:
     }
 
     // draws start board
-    int start_draw()
+    int start_draw() //начальное положение, отрисовка всех текстур
     {
         if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         {
@@ -238,7 +238,7 @@ private:
     }
 
     // function that re-draw all the textures
-    void rerender()
+    void rerender() //функция прорисовки
     {
         // draw board
         SDL_RenderClear(ren);
@@ -295,13 +295,13 @@ private:
         }
         SDL_RenderSetScale(ren, 1, 1);
 
-        // draw arrows
+        // draw arrows  отрисовка стрелок
         SDL_Rect rect_left{ W / 40, H / 40, W / 15, H / 15 };
         SDL_RenderCopy(ren, back, NULL, &rect_left);
         SDL_Rect replay_rect{ W * 109 / 120, H / 40, W / 15, H / 15 };
         SDL_RenderCopy(ren, replay, NULL, &replay_rect);
 
-        // draw result
+        // draw result отрисовка кто выграл при финале игры
         if (game_results != -1)
         {
             string result_path = draw_path;
@@ -337,7 +337,7 @@ private:
     int W = 0;
     int H = 0;
     // history of boards
-    vector<vector<vector<POS_T>>> history_mtx;
+    vector<vector<vector<POS_T>>> history_mtx; // история изменений
 
   private:
     SDL_Window *win = nullptr;
@@ -351,7 +351,7 @@ private:
     SDL_Texture *back = nullptr;
     SDL_Texture *replay = nullptr;
     // texture files names
-    const string textures_path = project_path + "Textures/";
+    const string textures_path = "Textures/";
     const string board_path = textures_path + "board.png";
     const string piece_white_path = textures_path + "piece_white.png";
     const string piece_black_path = textures_path + "piece_black.png";
@@ -370,7 +370,7 @@ private:
     vector<vector<bool>> is_highlighted_ = vector<vector<bool>>(8, vector<bool>(8, 0));
     // matrix of possible moves
     // 1 - white, 2 - black, 3 - white queen, 4 - black queen
-    vector<vector<POS_T>> mtx = vector<vector<POS_T>>(8, vector<POS_T>(8, 0));
+    vector<vector<POS_T>> mtx = vector<vector<POS_T>>(8, vector<POS_T>(8, 0)); // матрица доски
     // series of beats for each move
     vector<int> history_beat_series;
 };

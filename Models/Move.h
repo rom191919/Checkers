@@ -1,9 +1,9 @@
 #pragma once
 #include <stdlib.h>
 
-typedef int8_t POS_T;
+typedef int8_t POS_T; //определение типа POS_T - int8
 
-struct move_pos
+struct move_pos //определение структуры хода и его логика + хранение позиций
 {
     POS_T x, y;             // from
     POS_T x2, y2;           // to

@@ -11,13 +11,13 @@ const int INF = 1e9;
 class Logic
 {
   public:
-    Logic(Board *board, Config *config) : board(board), config(config)
-    {
-        rand_eng = std::default_random_engine (
-            !((*config)("Bot", "NoRandom")) ? unsigned(time(0)) : 0);
-        scoring_mode = (*config)("Bot", "BotScoringType");
-        optimization = (*config)("Bot", "Optimization");
-    }
+      Logic(Board* board, Config* config) : board(board), config(config)
+      {
+          rand_eng = std::default_random_engine(
+              !((*config)("Bot", "NoRandom")) ? unsigned(time(0)) : 0);
+          scoring_mode = (*config)("Bot", "BotScoringType");
+          optimization = (*config)("Bot", "Optimization");
+      }
 
     vector<move_pos> find_best_turns(const bool color)
     {
@@ -176,28 +176,28 @@ private:
     }
 
 public:
-    void find_turns(const bool color)
+    void find_turns(const bool color) //поиск всех возможных ходов в зависимости от входных параметров
     {
         find_turns(color, board->get_board());
     }
 
-    void find_turns(const POS_T x, const POS_T y)
+    void find_turns(const POS_T x, const POS_T y) //переданные координаты
     {
         find_turns(x, y, board->get_board());
     }
 
 private:
-    void find_turns(const bool color, const vector<vector<POS_T>> &mtx)
+    void find_turns(const bool color, const vector<vector<POS_T>> &mtx) //приватная функция которая принимает цвет и вектор
     {
         vector<move_pos> res_turns;
         bool have_beats_before = false;
-        for (POS_T i = 0; i < 8; ++i)
+        for (POS_T i = 0; i < 8; ++i)  //проход по всем клеткам и сравниваем цвета
         {
             for (POS_T j = 0; j < 8; ++j)
             {
                 if (mtx[i][j] && mtx[i][j] % 2 != color)
                 {
-                    find_turns(i, j, mtx);
+                    find_turns(i, j, mtx); //проверяем наличие всех возможных ходов от найденой клетки
                     if (have_beats && !have_beats_before)
                     {
                         have_beats_before = true;
@@ -215,11 +215,11 @@ private:
         have_beats = have_beats_before;
     }
 
-    void find_turns(const POS_T x, const POS_T y, const vector<vector<POS_T>> &mtx)
+    void find_turns(const POS_T x, const POS_T y, const vector<vector<POS_T>> &mtx) //конечная функция определяетдоступные ходы
     {
         turns.clear();
         have_beats = false;
-        POS_T type = mtx[x][y];
+        POS_T type = mtx[x][y]; //проверка на тип фигуры
         // check beats
         switch (type)
         {
@@ -267,7 +267,7 @@ private:
             break;
         }
         // check other turns
-        if (!turns.empty())
+        if (!turns.empty()) //варианты побитий
         {
             have_beats = true;
             return;
@@ -275,7 +275,7 @@ private:
         switch (type)
         {
         case 1:
-        case 2:
+        case 2: //логика ходов королевы
             // check pieces
             {
                 POS_T i = ((type % 2) ? x - 1 : x + 1);

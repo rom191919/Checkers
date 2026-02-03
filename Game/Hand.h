@@ -1,4 +1,6 @@
 #pragma once
+#include <SDL.h>
+
 #include <tuple>
 
 #include "../Models/Move.h"
@@ -20,29 +22,29 @@ class Hand
         int xc = -1, yc = -1;
         while (true)
         {
-            if (SDL_PollEvent(&windowEvent))
+            if (SDL_PollEvent(&windowEvent)) //ожидает клик
             {
                 switch (windowEvent.type)
                 {
-                case SDL_QUIT:
+                case SDL_QUIT: //клик на выход
                     resp = Response::QUIT;
                     break;
-                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONDOWN: //нажатие
                     x = windowEvent.motion.x;
                     y = windowEvent.motion.y;
                     xc = int(y / (board->H / 10) - 1);
                     yc = int(x / (board->W / 10) - 1);
                     if (xc == -1 && yc == -1 && board->history_mtx.size() > 1)
                     {
-                        resp = Response::BACK;
+                        resp = Response::BACK; //нажатие на кнопку назад
                     }
                     else if (xc == -1 && yc == 8)
                     {
-                        resp = Response::REPLAY;
+                        resp = Response::REPLAY; //нажатие на кнопку повтор
                     }
                     else if (xc >= 0 && xc < 8 && yc >= 0 && yc < 8)
                     {
-                        resp = Response::CELL;
+                        resp = Response::CELL; //нажатие на поле
                     }
                     else
                     {
@@ -50,7 +52,7 @@ class Hand
                         yc = -1;
                     }
                     break;
-                case SDL_WINDOWEVENT:
+                case SDL_WINDOWEVENT: // изменение ширины экрана
                     if (windowEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                     {
                         board->reset_window_size();
@@ -61,10 +63,10 @@ class Hand
                     break;
             }
         }
-        return {resp, xc, yc};
+        return {resp, xc, yc}; //если было нажатие, то возвращаем resp с координатами
     }
 
-    Response wait() const
+    Response wait() const //функция при окончании игры
     {
         SDL_Event windowEvent;
         Response resp = Response::OK;
